@@ -170,11 +170,16 @@ class Document(models.Model):
 
 class Project(models.Model):
     project_id = models.CharField(primary_key=True, max_length=200)
+    project_name = models.CharField(max_length=200)
     country = models.CharField(max_length=200)
 
     class Meta:
         managed = False
         db_table = 'project_table'
+
+
+    def __str__(self):
+        return self.project_name or '<untitled>'
 
 
 class Statement(models.Model):
