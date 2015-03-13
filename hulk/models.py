@@ -162,7 +162,8 @@ class DjangoMigrations(models.Model):
 
 class Document(models.Model):
     doc_id = models.CharField(primary_key=True, max_length=200, default=random_id)
-    host_url = models.CharField(max_length=200)
+    host_url = models.CharField(max_length=200, default='')
+    source_url = models.CharField(max_length=200, default='')
 
     class Meta:
         managed = False
