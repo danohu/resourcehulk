@@ -8,11 +8,16 @@ def tullow2013():
     print(fn)
     reader = csv.reader(open(fn))
     next(reader)
-    company, created = models.Company.objects.g_or_create(
-        defaults = 
-        )
     for line in reader:
         project, country, company, year, source, link = line
+        company, created = models.Company.objects.get_or_create(
+            name = company,
+            defaults = {}
+            )
+        project, created = models.Project.objects.get_or_create(
+            name = project,
+            defaults = {}
+            )
         document, created = models.Document.objects.get_or_create(
             title = source,
             source_url = link)
@@ -22,7 +27,8 @@ def tullow2013():
             name = 'Listing in Tullow annual report -- %s, %s' % (project, country),
             document=document,
             )
-        statement.add_company(company)
+        statement.companies.add(company)
+        statement.projects.add(project)
 
 
 
