@@ -32,4 +32,9 @@ psql> grant all privileges on database resourcehulk to resourcehulk
 
 You may also need to modify postgres settings to not require peer authentication
 
-# Details of the serv
+# Importing data
+
+```
+python manage.py hulkgrab all
+```
+
