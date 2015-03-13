@@ -1,4 +1,9 @@
 from django.db import models
+import uuid
+
+def random_id(*args, **kwargs):
+    return uuid.uuid4().hex
+
 
 
 """
@@ -56,7 +61,7 @@ class ContractLink(models.Model):
 """
 
 class Commodity(models.Model):
-    commodity_id = models.CharField(primary_key=True, max_length=200)
+    commodity_id = models.CharField(primary_key=True, max_length=200, default=random_id)
     commodity_name = models.CharField(max_length=200)
 
     class Meta:
@@ -68,7 +73,7 @@ class Commodity(models.Model):
 
 
 class CompanyAlias(models.Model):
-    company_alias = models.CharField(primary_key=True, max_length=200)
+    company_alias = models.CharField(primary_key=True, max_length=200, default=random_id)
     company_id = models.CharField(max_length=200)
 
     class Meta:
@@ -81,7 +86,7 @@ class CompanyAlias(models.Model):
 
 
 class Company(models.Model):
-    company_id = models.CharField(primary_key=True, max_length=200)
+    company_id = models.CharField(primary_key=True, max_length=200, default=random_id)
     open_lei_id = models.CharField(max_length=200, blank=True)
     duns_number = models.CharField(max_length=200, blank=True)
     company_name = models.CharField(max_length=200)
@@ -156,7 +161,7 @@ class DjangoMigrations(models.Model):
 
 
 class Document(models.Model):
-    doc_id = models.CharField(primary_key=True, max_length=200)
+    doc_id = models.CharField(primary_key=True, max_length=200, default=random_id)
     host_url = models.CharField(max_length=200)
 
     class Meta:
@@ -169,7 +174,7 @@ class Document(models.Model):
 
 
 class Project(models.Model):
-    project_id = models.CharField(primary_key=True, max_length=200)
+    project_id = models.CharField(primary_key=True, max_length=200, default=random_id)
     project_name = models.CharField(max_length=200)
     country = models.CharField(max_length=200)
 
@@ -183,15 +188,17 @@ class Project(models.Model):
 
 
 class Statement(models.Model):
-    statement_id = models.CharField(primary_key=True, max_length=200)
+    statement_id = models.CharField(primary_key=True, max_length=200, default=random_id)
     doc = models.ForeignKey(Document)
     statement_content = models.CharField(max_length=200)
     definitive = models.BooleanField(default=False)
 
-    projects = models.ManyToManyField('Project', db_table='project_link_table')
-    companies = models.ManyToManyField('Company', db_table='company_link_table')
-    concessions = models.ManyToManyField('Concession', db_table='concession_link_table')
-    projects = models.ManyToManyField('Contract', db_table='contract_link_table')
+    projects = models.ManyToManyField('Project', db_table='project_link_table', blank=True)
+    companies = models.ManyToManyField('Company', db_table='company_link_table', blank=True)
+    concessions = models.ManyToManyField('Concession', db_table='concession_link_table',
+                                         blank=True)
+    contracts = models.ManyToManyField('Contract', db_table='contract_link_table',
+                                      blank=True)
 
     class Meta:
         managed = False

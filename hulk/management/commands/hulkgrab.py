@@ -5,27 +5,25 @@ import os
 
 def tullow2013():
     fn = os.path.dirname(__file__) + '/../../../data/20150312_tullow_cr2013.csv'
-    print(fn)
     reader = csv.reader(open(fn))
     next(reader)
     for line in reader:
         project, country, company, year, source, link = line
         company, created = models.Company.objects.get_or_create(
-            name = company,
+            company_name = company,
             defaults = {}
             )
         project, created = models.Project.objects.get_or_create(
-            name = project,
+            project_name = project,
             defaults = {}
             )
         document, created = models.Document.objects.get_or_create(
-            title = source,
-            source_url = link)
+            host_url = link)
         print('document - created %s' % created)
         statement, created = models.Statement.objects.get_or_create(
-            defaults = {'confidence': 0},
-            name = 'Listing in Tullow annual report -- %s, %s' % (project, country),
-            document=document,
+            defaults = {'definitive': False},
+            statement_content = 'Listing in Tullow annual report -- %s, %s' % (project, country),
+            doc=document,
             )
         statement.companies.add(company)
         statement.projects.add(project)
