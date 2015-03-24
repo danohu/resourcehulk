@@ -16,3 +16,7 @@ def project(request, project_id):
     project = get_object_or_404(models.Project, pk=project_id)
     return HttpResponse('project %s ' % project.name)
 
+def search(request, search_id):
+    srch = get_object_or_404(models.search, pk=search_id)
+    pass
+    

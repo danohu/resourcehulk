@@ -56,10 +56,20 @@ class ContractLink(models.Model):
     class Meta:
         managed = False
         db_table = 'contract_link_table'
-
-
 """
 
+class Search(models.Model):
+    '''
+    Represents one run of any of the data-searching code
+    '''
+    label = models.CharField(max_length=10, primary_key=True)
+    metadata = models.JSONField(type=dict)
+
+class SearchResult(models.Model):
+    id = models.AutoField(primary_key=True)
+    search = models.ForeignKey('Search')
+    sequencenum = models.IntegerField()
+    metadata = models.JSONField(type=dict)
 
 class Commodity(models.Model):
     commodity_id = models.CharField(primary_key=True, max_length=200, default=random_id)
