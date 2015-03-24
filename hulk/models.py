@@ -1,4 +1,4 @@
-from django.db import models
+from django_pg import models
 import uuid
 
 def random_id(*args, **kwargs):
@@ -59,6 +59,7 @@ class ContractLink(models.Model):
 
 
 """
+
 
 class Commodity(models.Model):
     commodity_id = models.CharField(primary_key=True, max_length=200, default=random_id)
