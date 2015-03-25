@@ -1,0 +1,15 @@
+<html>
+
+
+{% for r in results %}
+<table>
+<tr><th>Label</th><th>Value</th></tr>
+ {% for k in keys %}
+<tr><td>{{ k }} </td>
+<td>{{ r.metadata[k] }}</td>
+</tr>
+  {% endfor %}
+</table>
+{% endfor %}
+
+</html>

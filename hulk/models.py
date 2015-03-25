@@ -67,7 +67,7 @@ class Search(models.Model):
 
 class SearchResult(models.Model):
     id = models.AutoField(primary_key=True)
-    search = models.ForeignKey('Search')
+    search = models.ForeignKey('Search', related_name='results')
     sequencenum = models.IntegerField()
     metadata = models.JSONField(type=dict)
 
