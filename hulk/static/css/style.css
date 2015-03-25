@@ -1,0 +1,27 @@
+
+body {
+}
+
+table.searchresults {
+    margin: 30px 50px;
+    font-size: 18px;
+    line-height: 30px;
+    border: 1px solid #eee;
+    box-shadow: 4px 4px 4px #eee;
+    border-collapse: collapse;
+    /*border-spacing: 7px;*/
+    }
+
+td {
+    padding-top: 14px;
+    padding-left: 25px;
+}
+
+td.searchleft {
+    font-style: italic;
+    width: 230px;
+    }
+
+td.searchright {
+    border-bottom: 1px dotted #eee;
+    }

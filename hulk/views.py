@@ -19,7 +19,7 @@ def project(request, project_id):
 
 def search(request, search_id):
     # show the result
-    per_page = 20
+    per_page = 200
     srch = get_object_or_404(models.Search, pk=search_id)
     paginator = Paginator(srch.results.all(), per_page)
     page = request.GET.get('page')
@@ -32,7 +32,14 @@ def search(request, search_id):
     return render_to_response('search.jinja',
                               {'results': results,
                                'search': srch,
-                               'keys': ['filepath', 'score', 'extract',
-                                        'positives', 'country_names']            
+                               'keys': [
+                                   ('filepath', 'Full document (copy)'),
+                                   ('edgar_link', 'Full document (original)'),
+                                   ('edgar_exhibit_number', 'Exhibition number (on EDGAR)'),
+                                   ('score', 'Number of matches in document'),
+                                   ('extract', 'Start of document'),
+                                   ('positives', 'Matches in context'),
+                                   ('country_names', 'Countries named in document')],
+
                            })
     

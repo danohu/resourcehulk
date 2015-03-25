@@ -65,11 +65,19 @@ class Search(models.Model):
     label = models.CharField(max_length=10, primary_key=True)
     metadata = models.JSONField(type=dict)
 
+    def __str__(self):
+        return self.label or '<untitled>'
+
+
 class SearchResult(models.Model):
     id = models.AutoField(primary_key=True)
     search = models.ForeignKey('Search', related_name='results')
     sequencenum = models.IntegerField()
     metadata = models.JSONField(type=dict)
+
+    def __str__(self):
+        return self.metadata.get('extract', str(self.sequencenum))
+
 
 class Commodity(models.Model):
     commodity_id = models.CharField(primary_key=True, max_length=200, default=random_id)
