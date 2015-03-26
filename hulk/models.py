@@ -1,62 +1,19 @@
 from django_pg import models
+from datetime import datetime
 import uuid
 
 def random_id(*args, **kwargs):
     return uuid.uuid4().hex
 
-
-
-"""
-class BeneficialOwnership(models.Model):
-    owned_by = models.ForeignKey('Company')
-    owner_of = models.ForeignKey('Company')
-
-    class Meta:
-        managed = False
-        db_table = 'benneficial_ownership_table'
-
-
-class CommodityLink(models.Model):
-    commodity = models.ForeignKey('Commodity')
-    entity_id = models.CharField(max_length=200)
-
-    class Meta:
-        managed = False
-        db_table = 'commodity_link_table'
-
-class CompanyLink(models.Model):
-    statement = models.ForeignKey('Statement')
-    company = models.ForeignKey('Company')
-
-    class Meta:
-        managed = False
-        db_table = 'company_link_table'
-
-
-class ConcessionLink(models.Model):
-    statement = models.ForeignKey('Statement')
-    concession = models.ForeignKey('Concession')
-
-    class Meta:
-        managed = False
-        db_table = 'concession_link_table'
-
-class ProjectLink(models.Model):
-    statement = models.ForeignKey('Statement')
-    project = models.ForeignKey('Project')
-
-    class Meta:
-        managed = False
-        db_table = 'project_link_table'
-
-class ContractLink(models.Model):
-    statement = models.ForeignKey('Statement')
-    contract = models.ForeignKey('Contract')
-
-    class Meta:
-        managed = False
-        db_table = 'contract_link_table'
-"""
+class SourceInfo(models.Model):
+    '''
+    Contains source information
+    '''
+    id = models.AutoField(primary_key=True)
+    contributor = models.CharField(max_length=200)
+    license = models.CharField(max_length=200)
+    date = models.DateTimeField(default=datetime.now)
+    info = models.JSONField(type=dict, default={})
 
 class Search(models.Model):
     '''
@@ -117,7 +74,9 @@ class Company(models.Model):
     
     cik = models.IntegerField(blank=True, null=True, db_index=True)
     sic = models.IntegerField(blank=True, null=True)
-    jurisdiction = models.CharField(max_length=50, blank=True)    
+    jurisdiction = models.CharField(max_length=50, blank=True)
+
+    source=models.ForeignKey('SourceInfo', blank=True,null=True, related_name='companies')
 
     class Meta:
         #managed = False
