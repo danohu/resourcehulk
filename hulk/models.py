@@ -21,6 +21,7 @@ class Search(models.Model):
     '''
     label = models.CharField(max_length=10, primary_key=True)
     metadata = models.JSONField(type=dict)
+    source = models.ForeignKey('SourceInfo', null=True,blank=True)
 
     def __str__(self):
         return self.label or '<untitled>'
@@ -41,7 +42,6 @@ class Commodity(models.Model):
     commodity_name = models.CharField(max_length=200)
 
     class Meta:
-        managed = False
         db_table = 'commodity_table'
 
     def __str__(self):
@@ -53,7 +53,6 @@ class CompanyAlias(models.Model):
     company_id = models.CharField(max_length=200)
 
     class Meta:
-        managed = False
         db_table = 'company_alias_table'
 
     def __str__(self):
@@ -79,7 +78,6 @@ class Company(models.Model):
     source=models.ForeignKey('SourceInfo', blank=True,null=True, related_name='companies')
 
     class Meta:
-        #managed = False
         db_table = 'company_table'
 
     def __str__(self):
@@ -91,7 +89,6 @@ class ConcessionAlias(models.Model):
     concession_id = models.CharField(max_length=200)
 
     class Meta:
-        managed = False
         db_table = 'concession_alias_table'
 
     def __str__(self):
@@ -103,9 +100,9 @@ class Concession(models.Model):
     concession_name = models.CharField(max_length=200)
     unep_geo_id = models.CharField(max_length=200, blank=True)
     country = models.CharField(max_length=200)
+    source = models.ForeignKey('SourceInfo', null=True,blank=True)
 
     class Meta:
-        managed = False
         db_table = 'concession_table'
 
     def __str__(self):
@@ -115,7 +112,7 @@ class Concession(models.Model):
 
 class Contract(models.Model):
     contract_id = models.CharField(primary_key=True, max_length=200)
-    doc = models.ForeignKey('Document')
+    doc = models.ForeignKey('Document',null=True,blank=True)
     country = models.CharField(max_length=200)
     sign_date = models.CharField(max_length=200)
     title_type = models.CharField(max_length=200, blank=True)
@@ -123,9 +120,9 @@ class Contract(models.Model):
     doc_cloud_id = models.CharField(max_length=200)
     doc_cloud_url = models.CharField(max_length=200)
     sign_year = models.CharField(max_length=200)
+    source = models.ForeignKey('SourceInfo', null=True,blank=True)
 
     class Meta:
-        managed = False
         db_table = 'contract_table'
 
     def __str__(self):
@@ -138,7 +135,6 @@ class DjangoMigrations(models.Model):
     applied = models.DateTimeField()
 
     class Meta:
-        managed = False
         db_table = 'django_migrations'
 
 
@@ -146,23 +142,21 @@ class Document(models.Model):
     doc_id = models.CharField(primary_key=True, max_length=200, default=random_id)
     host_url = models.CharField(max_length=200, default='')
     source_url = models.CharField(max_length=200, default='')
+    source = models.ForeignKey('SourceInfo', null=True,blank=True)
 
     class Meta:
-        managed = False
         db_table = 'document_table'
 
     def __str__(self):
         return self.host_url or '<untitled>'
 
-
-
 class Project(models.Model):
     project_id = models.CharField(primary_key=True, max_length=200, default=random_id)
-    project_name = models.CharField(max_length=200)
-    country = models.CharField(max_length=200)
+    project_name = models.CharField(max_length=200,null=True,blank=True)
+    country = models.CharField(max_length=200,null=True,blank=True)
+    source = models.ForeignKey('SourceInfo', null=True,blank=True)
 
     class Meta:
-        managed = False
         db_table = 'project_table'
 
 
@@ -172,7 +166,7 @@ class Project(models.Model):
 
 class Statement(models.Model):
     statement_id = models.CharField(primary_key=True, max_length=200, default=random_id)
-    doc = models.ForeignKey(Document)
+    doc = models.ForeignKey(Document,blank=True,null=True,default=None)
     statement_content = models.CharField(max_length=200)
     definitive = models.BooleanField(default=False)
 
@@ -183,65 +177,11 @@ class Statement(models.Model):
     contracts = models.ManyToManyField('Contract', db_table='contract_link_table',
                                       blank=True)
 
+    source = models.ForeignKey('SourceInfo', null=True,blank=True)
+
+
     class Meta:
-        managed = False
         db_table = 'statement_table'
 
     def __str__(self):
         return self.statement_content or '<untitled>'
-
-"""
-
-class Company(models.Model):
-    name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name or '<untitled>'
-
-class License(models.Model):
-    name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name or '<untitled>'
-
-
-class Statement(models.Model):
-    name = models.CharField(max_length=200)
-    document = models.ForeignKey('Document')
-    
-    snippet = models.TextField()
-
-    # when somebody reviews a statement, they set confidence
-    # the system also adds the date they modified it
-    confidence = models.FloatField() # should be between 0 and 100
-    reviewed = models.DateField(blank=True, null=True) 
-    # reviewed should be auto-update-date, but one that automated scripts can skip
-    
-    licenses = models.ManyToManyField('License')
-    projects = models.ManyToManyField('Project')
-    companies = models.ManyToManyField('Company')
-
-    def __str__(self):
-        return self.name or '<untitled>'
-
-
-class Project(models.Model):
-    name = models.CharField(max_length=200)
-    country = models.CharField(max_length=50, blank=True) # should be choice
-    # location -- should be some kind of geoid?
-
-    def __str__(self):
-        return self.name or '<untitled>'
-
-class Document(models.Model):
-    title = models.TextField(blank=True)
-    date = models.DateField(blank=True, null=True)
-    source_url = models.URLField() # official source, eg. on EDGAR
-    mirror_url = models.URLField() # our copy of it, eg on S3
-    
-
-    def __str__(self):
-        return self.title or '<untitled>'
-
-
-"""
