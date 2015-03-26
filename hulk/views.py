@@ -34,7 +34,11 @@ def search(request, search_id):
                                'search': srch,
                                'keys': [
                                    ('filepath', 'Full document (copy)'),
-                                   ('edgar_link', 'Full document (original)'),
+                                   ('source_url', 'Full document (original)'),
+                                   ('company_name', 'Company'),
+                                   ('filing_type', 'Type of filing'),
+                                   ('filing_date', 'Date filed'),
+                                   ('cik', 'CIK (Edgar company identifier)'),
                                    ('edgar_exhibit_number', 'Exhibition number (on EDGAR)'),
                                    ('score', 'Number of matches in document'),
                                    ('extract', 'Start of document'),
