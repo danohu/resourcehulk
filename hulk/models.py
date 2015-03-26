@@ -114,9 +114,13 @@ class Company(models.Model):
     open_corp_id = models.CharField(max_length=200, blank=True)
     vat_id = models.CharField(max_length=200, blank=True)
     company_url = models.CharField(max_length=200, blank=True)
+    
+    cik = models.IntegerField(blank=True, null=True, db_index=True)
+    sic = models.IntegerField(blank=True, null=True)
+    jurisdiction = models.CharField(max_length=50, blank=True)    
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'company_table'
 
     def __str__(self):

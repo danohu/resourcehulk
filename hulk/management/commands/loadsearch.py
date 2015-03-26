@@ -8,6 +8,7 @@ from hulk import models
 import uuid
 import json
 import re
+from canopener import canopener
 
 
 def edgar_link(_fn):
@@ -36,7 +37,7 @@ class Command(BaseCommand):
         label = kwargs['label'] or uuid.uuid4().hex[:10]
         search = models.Search(label, metadata={})
         search.save()
-        fh = open(path, 'r')
+        fh = canopener(path)
         for linenum, line in enumerate(fh,1):
             js = json.loads(line)
             js = self.postprocess_line(js, kwargs)
