@@ -39,7 +39,7 @@ def prettyprint(content, label):
         return ', '.join(str(x).capitalize() for x in content)
     elif isinstance(content, dict):
         return as_table(content)
-    elif isinstance(content, str):
+    elif isinstance(content, (str,unicode)):
         if content.startswith('http'):
             return as_link(content)
         elif content.startswith('s3://'):

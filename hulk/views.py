@@ -19,7 +19,7 @@ def project(request, project_id):
 
 def search(request, search_id):
     # show the result
-    per_page = 200
+    per_page = 2000
     srch = get_object_or_404(models.Search, pk=search_id)
     paginator = Paginator(srch.results.all(), per_page)
     page = request.GET.get('page')
